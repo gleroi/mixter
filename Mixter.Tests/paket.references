@@ -1,0 +1,6 @@
+﻿FSharp.Core
+Unquote
+xUnit
+xunit.runner.visualstudio
+Microsoft.NET.Test.Sdk
+Microsoft.DotNet.Watcher.Tools
