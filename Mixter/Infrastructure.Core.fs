@@ -19,3 +19,19 @@ type MemoryTimelineMessageStore() =
 
     member __.Delete messageId =
         store.RemoveWhere(fun p -> p.MessageId = messageId) |> ignore
+
+[<Repository>]
+type MemoryFollowersRepository() =
+    let store = new HashSet<SubscriptionProjection.SubscriptionProjection>()
+
+    member __.Save projection =
+        store.Add projection |> ignore
+
+    [<Query>]
+    member __.GetFollowers followee =
+        store 
+        |> Seq.filter (fun p -> p.Followee = followee)
+        |> Seq.map (fun p -> p.Follower)
+
+    member __.Delete projection =
+        store.Remove projection |> ignore
