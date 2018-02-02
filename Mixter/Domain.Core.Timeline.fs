@@ -11,4 +11,5 @@ type TimelineMessage = { Owner: UserId; Author: UserId; Content: string; Message
 let handle (save: TimelineMessage -> unit) (remove: MessageId -> unit) (evt: Event) =
     match evt with
     | MessageQuacked e -> save { Owner = e.AuthorId; Author = e.AuthorId; Content = e.Content; MessageId = e.MessageId }
+    | MessageDeleted e -> remove e.MessageId
     | _ -> ()
