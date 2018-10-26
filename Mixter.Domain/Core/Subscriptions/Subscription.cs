@@ -30,7 +30,7 @@ namespace Mixter.Domain.Core.Subscriptions
             if (!_projection.IsActive) {
                 return;
             }
-            
+
             var evt = new FolloweeMessageQuacked(_projection.Id, msgId);
             eventPublisher.Publish(evt);
         }
@@ -40,6 +40,7 @@ namespace Mixter.Domain.Core.Subscriptions
         {
             public DecisionProjection() {
                 AddHandler<UserFollowed>(When);
+                AddHandler<UserUnfollowed>(When);
             }
 
             public SubscriptionId Id { get; private set; }
@@ -51,7 +52,7 @@ namespace Mixter.Domain.Core.Subscriptions
             }
 
             void When(UserUnfollowed evt) {
-                if (this.Id.Equals(evt.SubscriptionId)) {
+                if (!this.Id.Equals(evt.SubscriptionId)) {
                     throw new DomainException("invalid subscription id for unfollow");
                 }
                 this.IsActive = false;
