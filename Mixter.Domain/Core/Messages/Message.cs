@@ -38,6 +38,11 @@ namespace Mixter.Domain.Core.Messages
             eventPublisher.Publish(evt);
         }
 
+        public void Delete(IEventPublisher eventPublisher, UserId deleter) {
+            var evt = new MessageDeleted(_projection.Id, deleter);
+            eventPublisher.Publish(evt);
+        }
+
         [Projection]
         private class DecisionProjection : DecisionProjectionBase
         {
