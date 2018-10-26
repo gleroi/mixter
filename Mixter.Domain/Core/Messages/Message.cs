@@ -39,6 +39,9 @@ namespace Mixter.Domain.Core.Messages
         }
 
         public void Delete(IEventPublisher eventPublisher, UserId deleter) {
+            if (!_projection.Author.Equals(deleter)) {
+                return;
+            }
             var evt = new MessageDeleted(_projection.Id, deleter);
             eventPublisher.Publish(evt);
         }
