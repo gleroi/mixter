@@ -32,7 +32,7 @@ namespace Mixter.Domain.Core.Messages
             if (_projection.IsDeleted) {
                 return;
             }
-            
+
             if (_projection.Quackers.Contains(requacker))
             {
                 return;

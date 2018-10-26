@@ -1,4 +1,5 @@
-﻿using Mixter.Domain.Core.Subscriptions.Events;
+﻿using Mixter.Domain.Core.Messages;
+using Mixter.Domain.Core.Subscriptions.Events;
 using Mixter.Domain.Identity;
 
 namespace Mixter.Domain.Core.Subscriptions
@@ -24,6 +25,12 @@ namespace Mixter.Domain.Core.Subscriptions
             var evt = new UserUnfollowed(_projection.Id);
             eventPublisher.Publish(evt);
         }
+
+        public void NotifyFollower(IEventPublisher eventPublisher, MessageId msgId) {
+            var evt = new FolloweeMessageQuacked(_projection.Id, msgId);
+            eventPublisher.Publish(evt);
+        }
+
 
         private class DecisionProjection : DecisionProjectionBase
         {
