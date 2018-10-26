@@ -27,6 +27,10 @@ namespace Mixter.Domain.Core.Subscriptions
         }
 
         public void NotifyFollower(IEventPublisher eventPublisher, MessageId msgId) {
+            if (!_projection.IsActive) {
+                return;
+            }
+            
             var evt = new FolloweeMessageQuacked(_projection.Id, msgId);
             eventPublisher.Publish(evt);
         }
@@ -39,10 +43,20 @@ namespace Mixter.Domain.Core.Subscriptions
             }
 
             public SubscriptionId Id { get; private set; }
+            public bool IsActive {get; private set;}
 
             void When(UserFollowed evt) {
                 this.Id = evt.SubscriptionId;
+                this.IsActive = true;
             }
+
+            void When(UserUnfollowed evt) {
+                if (this.Id.Equals(evt.SubscriptionId)) {
+                    throw new DomainException("invalid subscription id for unfollow");
+                }
+                this.IsActive = false;
+            }
+
         }
     }
 }
